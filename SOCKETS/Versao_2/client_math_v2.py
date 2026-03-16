@@ -11,7 +11,7 @@ END_OP = "stop     "
 PORT = 35000
 SERVER_ADDRESS = "localhost"
 
-# ----- enviar e receber strings ----- #
+# enviar e receber strings
 def receive_str(connect, n_bytes: int) -> str:
     """
     :param n_bytes: The number of bytes to read from the current connection
