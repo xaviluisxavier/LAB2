@@ -5,7 +5,7 @@ SERVER_ADDRESS = "localhost"
 INT_SIZE = 8
 COMMAND_SIZE = 4
 
-# ---------------------- interaction with sockets ------------------------------
+# interaction with sockets
 def receive_int(connection, n_bytes: int) -> int:
     data = connection.recv(n_bytes)
     return int.from_bytes(data, byteorder='big', signed=True)
@@ -18,9 +18,7 @@ def receive_str(connection, n_bytes: int) -> str:
     return data.decode()
 
 def send_str(connection, value: str) -> None:
-    # BUG ORIGINAL: connection.current_connection.send(value.encode())
     connection.send(value.encode())
-# ---------------------------------------------------------------------------------------
 
 def main():
     s = socket.socket()
