@@ -6,7 +6,7 @@ INT_SIZE = 8
 ADDRESS = "127.0.0.1"
 PORT = 35000
 
-# ----- enviar e receber strings ----- #
+# enviar e receber strings
 def receive_str(connect, n_bytes: int) -> str:
     data = connect.recv(n_bytes)
     return data.decode()
@@ -20,7 +20,6 @@ def send_int(connect: socket.socket, value: int, n_bytes: int) -> None:
 def receive_int(connect: socket.socket, n_bytes: int) -> int:
     data = connect.recv(n_bytes)
     return int.from_bytes(data, byteorder='big', signed=True)
-# -----------------------------------------------#
 
 def main():
     # Socket & ligação
