@@ -12,7 +12,7 @@ END_OP = "stop     "
 PORT = 35000
 SERVER_ADDRESS = "localhost"
 
-# ---------------------- interaction with sockets ------------------------------
+#  interaction with sockets 
 def receive_int(connection, n_bytes: int) -> int:
     """
     :param n_bytes: The number of bytes to read from the current connection
@@ -68,8 +68,6 @@ def receive_object(connection):
     size = receive_int(connection, INT_SIZE)  # Recebe o tamanho
     data = connection.recv(size)              # Recebe o objeto
     return json.loads(data.decode('utf-8'))
-# ---------------------------------------------------------------------------------------
-
 
 def main():
     """
