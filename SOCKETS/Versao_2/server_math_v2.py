@@ -11,7 +11,7 @@ END_OP = "stop     "
 PORT = 35000
 SERVER_ADDRESS = "localhost"
 
-# ---------------------- interaction with sockets ------------------------------
+# interaction with sockets 
 def receive_int(connection, n_bytes: int) -> int:
     """
     :param n_bytes: The number of bytes to read from the current connection
@@ -39,10 +39,7 @@ def send_str(connection, value: str) -> None:
     """
     :param value: The string value to send to the current connection
     """
-    # BUG ORIGINAL: connection.connection.send(value.encode())
     connection.send(value.encode())
-# ---------------------------------------------------------------------------------------
-
 
 def main():
     """
