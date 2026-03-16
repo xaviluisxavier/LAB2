@@ -1,0 +1,1 @@
+print("Hello, I'm init in the server side!")
