@@ -12,7 +12,7 @@ END_OP = "stop     "
 PORT = 35000
 SERVER_ADDRESS = "localhost"
 
-# ----- enviar e receber primitivos ----- #
+# enviar e receber primitivos 
 def receive_str(connect, n_bytes: int) -> str:
     """
     :param n_bytes: The number of bytes to read from the current connection
@@ -31,7 +31,7 @@ def receive_int(connect: socket.socket, n_bytes: int) -> int:
     data = connect.recv(n_bytes)
     return int.from_bytes(data, byteorder='big', signed=True)
 
-# ----- enviar e receber objetos (JSON) ----- #
+# enviar e receber objetos (JSON)
 def send_object(connection, obj) -> None:
     """
     Envia um objeto Python (dicionário, lista, etc.) serializado em JSON.
@@ -58,15 +58,13 @@ def receive_object(connection):
     size = receive_int(connection, INT_SIZE)  # Recebe o tamanho
     data = connection.recv(size)              # Recebe os bytes do objeto
     return json.loads(data.decode('utf-8'))
-# -------------------------------------------#
-
 
 def main():
     # Socket & ligação
     connection = socket.socket()
     connection.connect((SERVER_ADDRESS, PORT))
 
-    # --- Teste 1: Operação de soma simples (ADD_OP) ---
+    # Teste 1: Operação de soma simples (ADD_OP)
     a = 10
     b = 15
     send_str(connection, ADD_OP)
@@ -75,7 +73,7 @@ def main():
     res = receive_int(connection, INT_SIZE)
     print("O resultado da soma é:", res)
 
-    # --- Teste 2: Operação OBJ_OP com dicionário ---
+    # Teste 2: Operação OBJ_OP com dicionário
     # O cliente envia um dicionário com a operação e os operandos.
     # O servidor descodifica, realiza a operação e devolve o resultado como inteiro.
     operacao = {"oper": "+", "op1": 4, "op2": 5}
@@ -91,7 +89,7 @@ def main():
     res = receive_int(connection, INT_SIZE)
     print(f"OBJ_OP resultado de {operacao2}: {res}")
 
-    # --- Teste 3: Duas operações de subtração simples (SUB_OP) ---
+    # Teste 3: Duas operações de subtração simples (SUB_OP)
     for i in range(2):
         a += 1
         send_str(connection, SUB_OP)
@@ -100,12 +98,12 @@ def main():
         res = receive_int(connection, INT_SIZE)
         print("O resultado da subtração é:", res)
 
-    # --- Fechar a sessão (servidor mantém-se ativo para novos clientes) ---
+    # Fechar a sessão (servidor mantém-se ativo para novos clientes)
     send_str(connection, BYE_OP)
     print("Connection session closed. Server remains active.")
     connection.close()
 
-    # --- Para terminar o servidor também, substituir BYE_OP por END_OP ---
+    #  Para terminar o servidor também, substituir BYE_OP por END_OP 
     # send_str(connection, END_OP)
     # print("Server stop requested.")
     # connection.close()
