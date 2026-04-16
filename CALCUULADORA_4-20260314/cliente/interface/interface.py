@@ -7,6 +7,11 @@ OBJ_OP = "add_obj  "
 BYE_OP = "bye      "
 
 class Interacao:
+    """
+    Classe de Interface.
+    Interage com o utilizador via terminal, empacota os dados num objeto JSON 
+    e envia-os para a classe Maquina através de Sockets.
+    """
     def send_object(self, connection, obj):
         data = json.dumps(obj).encode('utf-8')
         size = len(data)
