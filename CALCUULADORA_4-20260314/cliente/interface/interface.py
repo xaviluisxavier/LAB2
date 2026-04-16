@@ -1,53 +1,36 @@
 import socket
 import json
 
-INT_SIZE = 4 # Tamanho fixo em bytes para o cabeçalho do tamanho da mensagem
+COMMAND_SIZE = 9
+INT_SIZE = 8
+OBJ_OP = "add_obj  "
+BYE_OP = "bye      "
 
-def send_int(connection, value, size):
-    """Função auxiliar para enviar o tamanho do objeto."""
-    connection.send(value.to_bytes(size, byteorder='big'))
-
-def send_object(connection, obj):
-    """1º: envia tamanho, 2º: envia dados."""
-    data = json.dumps(obj).encode('utf-8')
-    size = len(data)
-    send_int(connection, size, INT_SIZE)
-    connection.send(data)
-
-class Interface:
-    def __init__(self, host='127.0.0.1', port=5000):
-        self.host = host
-        self.port = port
+class Interacao:
+    def send_object(self, connection, obj):
+        data = json.dumps(obj).encode('utf-8')
+        size = len(data)
+        connection.send(size.to_bytes(INT_SIZE, byteorder="big", signed=True))
+        connection.send(data)
 
     def execute(self):
-        print("Qual é o cálculo que quer efetuar? x + - /")
+        """Substituição do execute pelo código do client_math_ver_3 """
+        print("Operação (+, -, /):")
         op = input().strip()
-        print("Preciso que introduza dois valores:")
-        x = float(input("x="))
-        y = float(input("y="))
+        x = int(input("x: "))
+        y = int(input("y: "))
 
-        # Estabelece a ligação indicando endereço e porta 
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        
-        try:
-            client_socket.connect((self.host, self.port))
+        conn = socket.socket()
+        conn.connect(("localhost", 35000))
 
-            # 1. Envia string com nome da operação
-            client_socket.send("OBJ_OP".encode('utf-8'))
-            
-            # Pequena pausa para evitar a junção de pacotes na receção
-            import time
-            time.sleep(0.1) 
+        # Enviar OBJ_OP e o dicionário 
+        conn.send(OBJ_OP.encode())
+        self.send_object(conn, {"oper": op, "op1": x, "op2": y})
 
-            # 2. Envia o dicionário com os operadores
-            dict_op = {"oper": op, "op1": x, "op2": y}
-            send_object(client_socket, dict_op)
+        # Receber resultado
+        res_data = conn.recv(INT_SIZE)
+        res = int.from_bytes(res_data, byteorder='big', signed=True)
+        print(f"Resultado: {res}")
 
-            # 3. Fica à espera do valor (resultado) do servidor
-            res = client_socket.recv(1024).decode('utf-8')
-            print(f"O valor da operação '{op}' é:", res)
-
-        except Exception as e:
-            print("Erro de comunicação com o servidor:", e)
-        finally:
-            client_socket.close()
+        conn.send(BYE_OP.encode())
+        conn.close()
