@@ -11,6 +11,10 @@ BYE_OP = "bye      "
 END_OP = "stop     "
 
 class Maquina:
+    """
+    Recebe os pedidos via rede (Sockets), processa a informação JSON, 
+    chama a operação matemática correspondente e devolve o resultado.
+    """
     def __init__(self):
         self.sum = Somar()
         self.sub = Subtrair()
