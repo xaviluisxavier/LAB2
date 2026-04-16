@@ -1,9 +1,10 @@
-from cliente.interface.interface import Interface
+from cliente.interface import Interacao
+from servidor.maquinas import Maquina
 
-def main():
-    print("A iniciar Cliente de Cálculo...")
-    intf = Interface()
-    intf.execute()
+def run_server():
+    server = Maquina()
+    server.execute()
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    ui = Interacao()
+    ui.execute()
